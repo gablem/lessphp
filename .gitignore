@@ -1,5 +1,7 @@
-*.swp
 *~
+*.swp
+.DS_Store
+Thumbs.db
 /*.less
 /*.css
 tests/bootstrap
