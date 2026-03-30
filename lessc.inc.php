@@ -894,7 +894,7 @@ class lessc {
 
     protected function lib_mod($args) {
         list($a, $b) = $this->assertArgs($args, 2, "mod");
-        return $this->assertNumber($a) % $this->assertNumber($b);
+        return fmod($this->assertNumber($a), $this->assertNumber($b));
     }
 
     protected function lib_tan($num) {
@@ -1150,7 +1150,7 @@ class lessc {
 
         $hsl = $this->toHSL($color);
 
-        $hsl[1] = $hsl[1] + $delta % 360;
+        $hsl[1] = $hsl[1] + fmod($delta, 360);
         if ($hsl[1] < 0) {
             $hsl[1] += 360;
         }
@@ -1670,7 +1670,7 @@ class lessc {
 
                 for ($i = 3; $i > 0; $i--) { // 3 2 1
                     $t = $num % (int)$width;
-                    $num /= $width;
+                    $num = (int)($num / $width);
 
                     $c[$i] = $t * (256/$width) + $t * floor(16/$width);
                 }
@@ -1819,7 +1819,7 @@ class lessc {
                 $out[] = $lval * $rval;
                 break;
             case '%':
-                $out[] = $lval % $rval;
+                $out[] = fmod($lval, $rval);
                 break;
             case '/':
                 if ($rval == 0) {
@@ -1878,7 +1878,7 @@ class lessc {
             $value = $left[1] - $right[1];
             break;
         case '%':
-            $value = $left[1] % $right[1];
+            $value = fmod($left[1], $right[1]);
             break;
         case '/':
             if ($right[1] == 0) $this->throwError('parse error: divide by zero');
