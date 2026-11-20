@@ -3302,8 +3302,22 @@ class lessc_parser {
                 if ($this->string($str)) {
                     // escape parent selector, (yuck)
                     foreach ($str[2] as &$chunk) {
-                        $chunk = str_replace($this->lessc->parentSelector, "$&$", $chunk);
+                        if (is_array($chunk)) {
+                            // An interpolation chunk, e.g. array("interpolate", array(...)).
+                            // Only replace in its string entries: PHP 8 converts nested
+                            // arrays to "Array" when they are passed to str_replace(),
+                            // whereas PHP 7 left them untouched.
+                            foreach ($chunk as &$part) {
+                                if (!is_array($part) && !is_object($part)) {
+                                    $part = str_replace($this->lessc->parentSelector, "$&$", $part);
+                                }
+                            }
+                            unset($part);
+                        } else {
+                            $chunk = str_replace($this->lessc->parentSelector, "$&$", $chunk);
+                        }
                     }
+                    unset($chunk);
 
                     $attrParts[] = $str;
                     $hasInterpolation = true;
