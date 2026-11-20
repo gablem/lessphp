@@ -149,7 +149,7 @@ if (has("w")) {
 					$ex->getMessage()."\n\n";
 
 				if (has("n")) {
-					`notify-send -u critical "compile failed" "{$ex->getMessage()}"`;
+					shell_exec('notify-send -u critical "compile failed" ' . escapeshellarg($ex->getMessage()));
 				}
 			}
 		}
