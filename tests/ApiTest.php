@@ -191,6 +191,45 @@ div span, div .big, div hello.world, pre span, pre .big, pre hello.world {
 
     }
 
+    /**
+     * new lessc($file) followed by parse(): relative @import statements
+     * (including nested ones) are resolved from the file's directory,
+     * whatever the current working directory is.
+     */
+    public function testParseFileWithRelativeImports() {
+        $dir = __DIR__ . "/fixtures/file-api";
+        $expected = file_get_contents("$dir/main.css");
+
+        $cwd = getcwd();
+        chdir(sys_get_temp_dir());
+        try {
+            $less = new lessc("$dir/main.less");
+            $this->assertSame($expected, $less->parse());
+        } finally {
+            chdir($cwd);
+        }
+    }
+
+    public function testCompileFileAndCachedCompile() {
+        $dir = __DIR__ . "/fixtures/file-api";
+        $expected = file_get_contents("$dir/main.css");
+
+        $less = new lessc();
+        $this->assertSame($expected, $less->compileFile("$dir/main.less"));
+
+        $less = new lessc();
+        $cache = $less->cachedCompile("$dir/main.less");
+        $this->assertSame($expected, $cache["compiled"]);
+        $files = array_map("basename", array_keys($cache["files"]));
+        sort($files);
+        $this->assertSame(
+            array("main.less", "mixins.less", "nested.less", "vars.less"),
+            $files);
+
+        // nothing changed: the same structure is returned
+        $this->assertSame($cache, $less->cachedCompile($cache));
+    }
+
     public function compile($str) {
         return trim($this->less->parse($str));
     }

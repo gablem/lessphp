@@ -1,0 +1,45 @@
+// Fixture: relative @import, variables, mixins, color operations, math
+@import "partials/vars";
+@import "partials/mixins.less";
+
+@base: #3a7bd5;
+@pad: 10px;
+
+.box {
+  .rounded(4px);
+  .shadow();
+  color: darken(@brand, 10%);
+  background: lighten(@base, 20%);
+  border: 1px solid fade(@brand, 50%);
+  padding: @pad (@pad * 2) (@pad / 2) (@pad + 3);
+  width: percentage(0.5);
+  height: ~"calc(100% - @{pad})";
+  margin: -@pad;
+  z-index: 7 % 3;
+  line-height: mod(11, 4);
+  .inner {
+    color: spin(@brand, 30);
+    background: mix(@brand, @base, 25%);
+    border-color: saturate(@base, 15%) desaturate(@base, 15%);
+    outline-color: (@base + #111) (@base - #050505) (@base * 2);
+    &:hover { color: contrast(@base); }
+  }
+  font: round(3.6px) ceil(2.1em) floor(2.9pt) sqrt(16) pow(2, 3);
+  r: red(@base) green(@base) blue(@base) alpha(@base) hue(@base) saturation(@base) lightness(@base);
+  rgba: rgba(10, 20, 30, 0.5) argb(rgba(10, 20, 30, 0.5)) hsl(120, 50%, 50%) hsla(120, 50%, 50%, 0.3);
+  short: #abc + #111;
+}
+
+.guarded(@a) when (lightness(@a) >= 50%) { background-color: black; }
+.guarded(@a) when (lightness(@a) < 50%) { background-color: white; }
+.g1 { .guarded(#ddd); }
+.g2 { .guarded(#222); }
+
+.args(@a; @rest...) { all: @arguments; first: @a; }
+.rest { .args(1px; 2px; 3px); }
+.noargs() { e: e("plain"); }
+.na { .noargs(); }
+
+@media screen and (max-width: @pad * 80) {
+  .box { display: none; }
+}

@@ -1,0 +1,48 @@
+.from-nested {
+  color: #e8491d;
+}
+.box {
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  color: #bf3913;
+  background: #8eb3e7;
+  border: 1px solid rgba(232,73,29,0.5);
+  padding: 10px 20px 5px 13px;
+  width: 50%;
+  height: calc(100% - 10px);
+  margin: -10px;
+  z-index: 1;
+  line-height: 3;
+  font: 4px 3em 2pt 4 8;
+  r: 58 123 213 1 215 65 53;
+  rgba: rgba(10,20,30,0.5) #7f0a141e #40bf40 rgba(64,191,64,0.3);
+  short: #bbccdd;
+}
+.box .inner {
+  color: #e8af1d;
+  background: #666fa7;
+  border-color: #2878e7 #4c7ec3;
+  outline-color: #4b8ce6 #3576d0 #74f6ff;
+}
+.box .inner:hover {
+  color: #ffffff;
+}
+.g1 {
+  background-color: black;
+}
+.g2 {
+  background-color: white;
+}
+.rest {
+  all: 1px 2px 3px;
+  first: 1px;
+}
+.na {
+  e: plain;
+}
+@media screen and (max-width: 800px) {
+  .box {
+    display: none;
+  }
+}
