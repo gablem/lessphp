@@ -99,6 +99,27 @@ class lessc {
         return preg_quote($what, '/');
     }
 
+    /**
+     * round() with the behaviour of PHP < 8.4.
+     *
+     * Before PHP 8.4, round() "pre-rounded" its argument to 15 significant
+     * digits, so a value such as 213.49999999999997 (the result of a color
+     * computation that is mathematically 213.5) was rounded to 214. PHP 8.4
+     * removed the pre-rounding and returns 213, which changes the generated
+     * colors. Reproduce the pre-rounding on PHP >= 8.4 so the CSS output is
+     * identical on every PHP version.
+     */
+    protected static function roundCompat($value, $places = 0) {
+        if (PHP_VERSION_ID >= 80400 && is_numeric($value) && $value != 0 && is_finite($value)) {
+            // same rule as php_round_helper() before PHP 8.4
+            $precisionPlaces = 14 - (int)floor(log10(abs($value)));
+            if ($precisionPlaces > $places && $precisionPlaces - 15 < $places) {
+                $value = round($value, $precisionPlaces);
+            }
+        }
+        return round($value, $places);
+    }
+
     protected function tryImport($importPath, $parentBlock, $out) {
         if ($importPath[0] == "function" && $importPath[1] == "url") {
             $importPath = $this->flattenList($importPath[2]);
@@ -847,7 +868,7 @@ class lessc {
             // [1] - the number
             // [2] - the unit
             if ($this->numberPrecision !== null) {
-                $num = round($num, $this->numberPrecision);
+                $num = self::roundCompat($num, $this->numberPrecision);
             }
             return $num . $unit;
         case 'string':
@@ -865,9 +886,9 @@ class lessc {
             // [3] - blue component
             // [4] - optional alpha component
             list(, $r, $g, $b) = $value;
-            $r = round($r);
-            $g = round($g);
-            $b = round($b);
+            $r = self::roundCompat($r);
+            $g = self::roundCompat($g);
+            $b = self::roundCompat($b);
 
             if (count($value) == 5 && $value[4] != 1) { // rgba
                 return 'rgba('.$r.','.$g.','.$b.','.$value[4].')';
@@ -1089,11 +1110,11 @@ class lessc {
     protected function lib_round($arg) {
         if ($arg[0] != "list") {
             $value = $this->assertNumber($arg);
-            return array("number", round($value), $arg[2]);
+            return array("number", self::roundCompat($value), $arg[2]);
         } else {
             $value = $this->assertNumber($arg[2][0]);
             $precision = $this->assertNumber($arg[2][1]);
-            return array("number", round($value, $precision), $arg[2][0][2]);
+            return array("number", self::roundCompat($value, $precision), $arg[2][0][2]);
         }
     }
 
@@ -1181,17 +1202,17 @@ class lessc {
 
     protected function lib_hue($color) {
         $hsl = $this->toHSL($this->assertColor($color));
-        return round($hsl[1]);
+        return self::roundCompat($hsl[1]);
     }
 
     protected function lib_saturation($color) {
         $hsl = $this->toHSL($this->assertColor($color));
-        return round($hsl[2]);
+        return self::roundCompat($hsl[2]);
     }
 
     protected function lib_lightness($color) {
         $hsl = $this->toHSL($this->assertColor($color));
-        return round($hsl[3]);
+        return self::roundCompat($hsl[3]);
     }
 
     // get the alpha of a color
@@ -1345,7 +1366,7 @@ class lessc {
     }
 
     protected function lib_luma($color) {
-        return array("number", round($this->toLuma($color) * 100, 8), "%");
+        return array("number", self::roundCompat($this->toLuma($color) * 100, 8), "%");
     }
 
 
