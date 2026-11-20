@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/leafo/lessphp.svg?branch=master)](https://travis-ci.org/leafo/lessphp)
+[![tests](https://github.com/gablem/lessphp/actions/workflows/tests.yml/badge.svg)](https://github.com/gablem/lessphp/actions/workflows/tests.yml)
 
 # lessphp v0.5.0
 ### <http://leafo.net/lessphp>

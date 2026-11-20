@@ -1,0 +1,42 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting=-1, display_errors=On, display_startup_errors=On, zend.assertions=1
+          coverage: none
+          tools: composer:v2
+
+      # No composer.lock is committed: resolve dependencies for this PHP version.
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Lint
+        run: for f in lessc.inc.php lessify.inc.php plessc lessify; do php -l "$f"; done
+
+      # PHPUnit (deprecations, notices and warnings fail the build) + phpcs
+      - name: Test suite
+        run: composer test
+
+      # The CLI must produce exactly the reference CSS, with nothing on stderr.
+      - name: plessc output
+        run: |
+          php -d error_reporting=-1 -d display_errors=stderr plessc tests/fixtures/file-api/main.less > "$RUNNER_TEMP/out.css" 2> "$RUNNER_TEMP/err.txt"
+          diff -u tests/fixtures/file-api/main.css "$RUNNER_TEMP/out.css"
+          if [ -s "$RUNNER_TEMP/err.txt" ]; then cat "$RUNNER_TEMP/err.txt"; exit 1; fi
