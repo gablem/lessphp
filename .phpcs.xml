@@ -11,12 +11,15 @@
 		<exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps" />
 		<exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody" />
 		<exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine" />
+		<exclude name="PSR2.Classes.PropertyDeclaration.StaticBeforeVisibility" />
+		<exclude name="PSR2.Classes.PropertyDeclaration.Underscore" />
 		<exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace" />
 		<exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace" />
 		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineCASE" />
 		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BreakIndent" />
 		<exclude name="PSR2.ControlStructures.SwitchDeclaration.BreakNotNewLine" />
 		<exclude name="PSR2.ControlStructures.SwitchDeclaration.TerminatingComment" />
+		<exclude name="PSR2.Files.EndFileNewline.NoneFound" />
 		<exclude name="PSR2.Methods.FunctionCallSignature.CloseBracketLine" />
 		<exclude name="PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket" />
 		<exclude name="PSR2.Methods.FunctionCallSignature.Indent" />
@@ -26,6 +29,7 @@
 		<exclude name="Squiz.Classes.ValidClassName.NotCamelCaps" />
 		<exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace" />
 		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceAfterDefault" />
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceAfterEquals" />
 		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceBeforeEquals" />
 		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
 		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace" />

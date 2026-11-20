@@ -9,3 +9,4 @@ tests/tmp
 vendor
 composer.lock
 *.code-workspace
+.phpunit.result.cache

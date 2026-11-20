@@ -20,7 +20,9 @@ class InputTest extends PHPUnit\Framework\TestCase {
         "inputs_lessjs" => "outputs_lessjs",
     );
 
-    public function setUp() {
+    protected $less;
+
+    public function setUp(): void {
         $this->less = new lessc();
         $this->less->importDir = array_map(function($path) {
             return __DIR__ . "/" . $path;
