@@ -65,6 +65,15 @@ class lessc {
 
     static protected $nextImportId = 0; // uniquely identify imports
 
+    // Compilation state. These used to be created dynamically (and were
+    // therefore public); they are declared explicitly for PHP 8.2+.
+    public $env = null;
+    public $scope = null;
+    public $parser = null;
+    public $formatter = null;
+    public $formatterName = null;
+    public $_parseFile = null;
+
     // attempts to find the path of an import url, returns null for css files
     protected function findImport($url) {
         foreach ((array)$this->importDir as $dir) {
@@ -2425,6 +2434,19 @@ class lessc_parser {
     // caches preg escaped literals
     static protected $literalCache = array();
 
+    // Parser state. These used to be created dynamically (and were
+    // therefore public); they are declared explicitly for PHP 8.2+.
+    public $eatWhiteDefault;
+    public $lessc;
+    public $sourceName;
+    public $writeComments;
+    public $count;
+    public $line;
+    public $env;
+    public $buffer;
+    public $seenComments;
+    public $inExp;
+
     public function __construct($lessc, $sourceName = null) {
         $this->eatWhiteDefault = true;
         // reference to less needed for vPrefix, mPrefix, and parentSelector
@@ -3780,6 +3802,8 @@ class lessc_formatter_classic {
     public $breakSelectors = false;
 
     public $compressColors = false;
+
+    public $indentLevel;
 
     public function __construct() {
         $this->indentLevel = 0;
