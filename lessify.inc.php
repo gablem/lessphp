@@ -43,7 +43,7 @@ class easyparse {
 
     public function match($regex, &$out, $eatWhitespace = true) {
         $r = '/'.$regex.($eatWhitespace ? '\s*' : '').'/Ais';
-        if (preg_match($r, $this->buffer, $out, null, $this->count)) {
+        if (preg_match($r, $this->buffer, $out, 0, $this->count)) {
             $this->count += strlen($out[0]);
             return true;
         }
@@ -56,7 +56,7 @@ class easyparse {
 
         // shortcut on single letter
         if (!$eatWhitespace and strlen($what) === 1) {
-            if ($this->buffer{$this->count} == $what) {
+            if ($this->buffer[$this->count] == $what) {
                 $this->count++;
                 return true;
             }
@@ -99,12 +99,12 @@ class tagparse extends easyparse {
     }
 
     public static function compilePaths($paths) {
-        return implode(', ', array_map(array('self', 'compilePath'), $paths));
+        return implode(', ', array_map(array(__CLASS__, 'compilePath'), $paths));
     }
 
     // array of tags
     public static function compilePath($path) {
-        return implode(' ', array_map(array('self', 'compileTag'), $path));
+        return implode(' ', array_map(array(__CLASS__, 'compileTag'), $path));
     }
 
 
@@ -363,11 +363,13 @@ class nodecounter {
  * create a less file from a css file by combining blocks where appropriate
  */
 class lessify extends lessc {
+    public $indentLevel;
+
     public function dump() {
         print_r($this->env);
     }
 
-    public function parse($str = null) {
+    public function parse($str = null, $initialVariables = null) {
         $this->prepareParser($str ? $str : $this->buffer);
         while (false !== $this->parseChunk());
 
